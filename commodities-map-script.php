@@ -133,7 +133,6 @@
               console.log("zoomed");
             }
 
-
             // Control logic to zoom when buttons are pressed, keep zooming while they are
             // pressed, stop zooming when released or moved off of, not snap-pan when
             // moving off buttons, and restore pan on mouseup.
@@ -205,8 +204,41 @@
 
     wmap.labels({"fontSize": 10, labelColor: "#222", 'customLabelText': labelsdata});
 
+    function arrangeLabels() {
+      var move = 1;
+      while(move > 0) {
+          move = 0;
+        d3.selectAll("text").each(function() {
+             var that = this,
+                 a = this.getBoundingClientRect();
+             d3.selectAll("text")
+                .each(function() {
+                  if(this != that) {
+                    var b = this.getBoundingClientRect();
+                    if((Math.abs(a.left - b.left) * 2 < (a.width + b.width)) &&
+                       (Math.abs(a.top - b.top) * 2 < (a.height + b.height))) {
+                      // overlap, move labels
+                      var dx = (Math.max(0, a.right - b.left) +
+                               Math.min(0, a.left - b.right)) * 0.01,
+                          dy = (Math.max(0, a.bottom - b.top) +
+                               Math.min(0, a.top - b.bottom)) * 0.02,
+                          tt = d3.transform(d3.select(this).attr("transform")),
+                          to = d3.transform(d3.select(that).attr("transform"));
+                      move += Math.abs(dx) + Math.abs(dy);
 
+                      to.translate = [ to.translate[0] + dx, to.translate[1] + dy ];
+                      tt.translate = [ tt.translate[0] - dx, tt.translate[1] - dy ];
+                      d3.select(this).attr("transform", "translate(" + tt.translate + ")");
+                      d3.select(that).attr("transform", "translate(" + to.translate + ")");
+                      a = this.getBoundingClientRect();
+                    }
+                  }
+                });
+           });
+         }
+    }
 
+    arrangeLabels();
 </script>
 
 <style>
