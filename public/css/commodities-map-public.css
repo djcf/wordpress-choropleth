@@ -1,0 +1,16 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+.ctrlButtonPanel {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 50px;
+    height: 100px;
+    background: beige none repeat scroll 0% 0%;
+    margin: 10px;
+    border: 1px solid olive;
+    box-shadow: 1px 1px 5px #888888;
+ }
