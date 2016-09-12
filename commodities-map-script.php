@@ -125,7 +125,7 @@
             }
 
             var zoom = d3.behavior.zoom()
-                .scaleExtent([1, 8])
+                .scaleExtent([0.9, 8])
                 .on("zoom", zoomed);
 
             function zoomed() {
@@ -140,6 +140,7 @@
 
             jQuery('.ctrlButtonPanel a').click(function(event){
                 event.preventDefault();
+                console.log(event.target.id + " clicked");
             });
 
             var pressed = false;
@@ -166,11 +167,11 @@
                     extent = zoom.scaleExtent(),
                     translate = zoom.translate(),
                     x = translate[0], y = translate[1],
-                    factor = zoom_in ? 1.3 : 1/1.3,
+                    factor = zoom_in ? 1.25 : 1/1.25,
                     target_scale = scale * factor;
 
                 // If we're already at an extent, done
-                if (target_scale === extent[0] || target_scale === extent[1]) { return false; }
+                //if (target_scale === extent[0] || target_scale === extent[1]) { return false; }
                 // If the factor is too much, scale it down to reach the extent exactly
                 var clamped_target_scale = Math.max(extent[0], Math.min(extent[1], target_scale));
                 if (clamped_target_scale != target_scale){
@@ -232,7 +233,7 @@
     margin: 15px;
 }
 
-#ctrlButtons a {
+#ctrlButtons a:hover {
   text-decoration: none;
 }
 
