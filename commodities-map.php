@@ -189,6 +189,8 @@ function print_inline_script() {
 }
 
 wp_enqueue_style( 'commodities-map-styles', plugins_url( 'public/css/commodities-map-public.css', __FILE__ ) );
+//wp_enqueue_script( 'commodities-map-js', plugins_url( 'commodities-map-script.php', __FILE__ ) );
+
 add_shortcode( 'commodities-map', 'commodities_add_shortcode' );
 
 // Hooking up our function to theme setup
