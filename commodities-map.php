@@ -132,7 +132,9 @@ function print_inline_script() {
 
     $args = array(
         'posts_per_page' => -1,
-        'post_type' => 'commodities'
+        'post_type' => 'commodities',
+				'orderby'=> 'title',
+				'order' => 'ASC'
     );
 
     $posts = get_posts($args);
@@ -168,7 +170,6 @@ function print_inline_script() {
         $area_series_js[] = sprintf('["%s",%s]', $region_name, $area_series[$region_name]);
         $area_series_labels[] = "'$region_name': '$region_total'";
     }
-
 
     $args = array(
         'posts_per_page' => -1,
