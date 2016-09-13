@@ -95,15 +95,18 @@ class Commodities_Map_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-         $plugin_dir = plugin_dir_url( __FILE__ ) . "/js";
 
+		//$plugin_dir = plugin_dir_url( __FILE__ ) . "js";
+		$plugin_dir = "http://localhost:8080/wp-content/plugins/commodities-map/public/js";
 				 //wp_enqueue_script( 'commodities-map-js', plugins_url( 'commodities-map-script.php', __FILE__ ) );
 
 		 #wp_enqueue_script( "jquery-qtip", "http://cdn.jsdelivr.net/qtip2/2.2.1/basic/jquery.qtip.min.js", array( 'jquery' ), $this->version);
 		 wp_enqueue_script( "mballoon", "$plugin_dir/components/jquery.mb.balloon.js", array('jquery'), $this->version);
 		 wp_enqueue_script( "d3",       "$plugin_dir/components/d3/d3.min.js", array(), $this->version);
 		 wp_enqueue_script( "topojson", "$plugin_dir/components/topojson/topojson.js", array("d3"), $this->version);
-		 wp_enqueue_script( "datamaps", "$plugin_dir/datamaps.world.js", array("d3", "topojson"), $this->version);
+		 wp_enqueue_script( "datamaps", "$plugin_dir/components/datamaps.world.js", array("d3", "topojson"), $this->version);
+
+		 wp_enqueue_script( "commodities-map-app", "$plugin_dir/app/main.js", array("d3", "topojson", "datamaps", "mballoon"), $this->version);
 	}
 
 	// Our custom post type function
@@ -217,7 +220,7 @@ class Commodities_Map_Public {
 	    }
 
 	    #if ( wp_script_is( 'datamaps', 'done' ) ) {
-	       include __DIR__ . "/../commodities-map-script.php";
+	       include __DIR__ . "/commodities-map-app-js.php";
 	    #}
 	}
 

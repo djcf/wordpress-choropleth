@@ -30,3 +30,4 @@
 	 */
 
 })( jQuery );
+alert("hello, world");
