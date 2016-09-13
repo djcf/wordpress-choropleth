@@ -71,10 +71,11 @@ class Commodities_Map_Public {
 		 */
 
          $plugin_dir = plugin_dir_url( __FILE__ ) . '/css';
-         
+
 		 wp_enqueue_style( 'mb.balloon', "$plugin_dir/mb.balloon.css", array(), $this->version);
 		 #wp_enqueue_style( "jquery-qtip", 'http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/basic/jquery.qtip.min.css', array(), $this->version, 'all' );
-        
+  		wp_enqueue_style( 'commodities-map-styles', plugins_url( 'public/css/commodities-map-public.css', __FILE__ ) );
+
 	}
 
 	/**
@@ -83,7 +84,6 @@ class Commodities_Map_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -96,12 +96,129 @@ class Commodities_Map_Public {
 		 * class.
 		 */
          $plugin_dir = plugin_dir_url( __FILE__ ) . "/js";
-         
+
+				 //wp_enqueue_script( 'commodities-map-js', plugins_url( 'commodities-map-script.php', __FILE__ ) );
+
 		 #wp_enqueue_script( "jquery-qtip", "http://cdn.jsdelivr.net/qtip2/2.2.1/basic/jquery.qtip.min.js", array( 'jquery' ), $this->version);
 		 wp_enqueue_script( "mballoon", "$plugin_dir/components/jquery.mb.balloon.js", array('jquery'), $this->version);
 		 wp_enqueue_script( "d3",       "$plugin_dir/components/d3/d3.min.js", array(), $this->version);
 		 wp_enqueue_script( "topojson", "$plugin_dir/components/topojson/topojson.js", array("d3"), $this->version);
 		 wp_enqueue_script( "datamaps", "$plugin_dir/datamaps.world.js", array("d3", "topojson"), $this->version);
+	}
+
+	// Our custom post type function
+	public function create_posttype() {
+
+		register_post_type( 'commodities',
+		// CPT Options
+			array(
+				'labels' => array(
+					'name' => __( 'Commodities' ),
+					'singular_name' => __( 'Commodity' )
+				),
+				'public' => true,
+				'has_archive' => true,
+				'rewrite' => array('slug' => 'commodities'),
+				'supports' => array(
+				  'title',
+				  'editor',
+				  'excerpt',
+				  'thumbnail',
+				  'custom-fields',
+				  'revisions'
+				)
+			)
+		);
+
+		register_post_type( 'countries',
+		// CPT Options
+			array(
+				'labels' => array(
+					'name' => __( 'Countries' ),
+					'singular_name' => __( 'Country' )
+				),
+				'public' => true,
+				'has_archive' => false,
+				'rewrite' => array('slug' => 'countries'),
+				'supports' => array(
+				  'title',
+				  'editor',
+				  'thumbnail',
+				  'revisions'
+				)
+			)
+		);
+
+	}
+
+	public static function commodities_add_shortcode( $atts ){
+		return '<div id="commodities-map" style="border:1px dotted blue; width: 100%; height: 365px; position: relative;"></div>';
+	}
+
+	public function print_inline_script() {
+	    $area_series = array();
+	    $area_series_pc = array();
+	    $area_series_js = array();
+	    $area_series_nav = array();
+	    $area_series_labels = array();
+
+	    $args = array(
+	        'posts_per_page' => -1,
+	        'post_type' => 'commodities',
+					'orderby'=> 'title',
+					'order' => 'ASC'
+	    );
+
+	    $posts = get_posts($args);
+
+	    foreach($posts as $post) {
+	        $post->fields  = get_post_custom($post->ID);
+	        $post->permalink = get_permalink($post->ID);
+
+	        if (isset($post->fields['country']) && is_array($post->fields['country'])) {
+	            foreach($post->fields['country'] as $country) {
+	                $post->country = strtoupper($country);
+	                if (isset($area_series[$post->country])) {
+	                    $area_series[$post->country]++;
+	                } else {
+	                    $area_series[$post->country] = 1;
+	                }
+
+	                if(!isset($area_series_nav[$post->country])) {
+	                    $area_series_nav[$post->country] = array();
+	                }
+	                $area_series_nav[$post->country][] = array(
+	                    'url'  =>  $post->permalink,
+	                    'title'=> $post->post_title
+	                );
+	            }
+	        }
+	    }
+
+	    $onepc = 100 / sizeof($posts);
+	    foreach($area_series as $region_name => $region_total) {
+	        $area_series_pc[$region_name] = intval($onepc * $region_total);
+	        $area_series_js_pc[] = sprintf('["%s",%s]', $region_name, $area_series_pc[$region_name]);
+	        $area_series_js[] = sprintf('["%s",%s]', $region_name, $area_series[$region_name]);
+	        $area_series_labels[] = "'$region_name': '$region_total'";
+	    }
+
+	    $args = array(
+	        'posts_per_page' => -1,
+	        'post_type' => 'countries'
+	    );
+
+	    $posts = get_posts($args);
+
+	    $countries = array();
+
+	    foreach($posts as $post) {
+	        $countries[$post->post_title] = $post->post_content;
+	    }
+
+	    #if ( wp_script_is( 'datamaps', 'done' ) ) {
+	       include __DIR__ . "/../commodities-map-script.php";
+	    #}
 	}
 
 }

@@ -70,6 +70,7 @@
     height = 367,
     center = [width / 2, height / 2];
 
+
     // render map
     var wmap = new Datamap({
         element: document.getElementById('commodities-map'),
@@ -132,6 +133,37 @@
               datamap.svg.selectAll("g").attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")");
               console.log("zoomed");
             }
+
+            /*var active = d3.select(null);
+            datamap.svg.selectAll("path")
+                .on("click", clicked);
+
+            function clicked(d) {
+                  if (active.node() === this) return reset();
+                  active.classed("active", false);
+                  active = d3.select(this).classed("active", true);
+
+                  var bounds = path.bounds(d),
+                      dx = bounds[1][0] - bounds[0][0],
+                      dy = bounds[1][1] - bounds[0][1],
+                      x = (bounds[0][0] + bounds[1][0]) / 2,
+                      y = (bounds[0][1] + bounds[1][1]) / 2,
+                      scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
+                      translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+                  svg.transition()
+                      .duration(750)
+                      .call(zoom.translate(translate).scale(scale).event);
+              }
+
+              function reset() {
+                  active.classed("active", false);
+                  active = d3.select(null);
+
+                  svg.transition()
+                      .duration(750)
+                      .call(zoom.translate([0, 0]).scale(1).event);
+              }*/
 
             // Control logic to zoom when buttons are pressed, keep zooming while they are
             // pressed, stop zooming when released or moved off of, not snap-pan when
@@ -251,8 +283,6 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 50px;
-    height: 100px;
     background: beige none repeat scroll 0% 0%;
     margin: 10px;
     border: 1px solid olive;

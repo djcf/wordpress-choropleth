@@ -170,6 +170,17 @@ class Commodities_Map {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
+		add_shortcode( 'commodities-map', array( 'Commodities_Map_Public',  'commodities_add_shortcode' ));
+
+		//$this->loader->add_action( 'commodities_add_shortcode', $plugin_public, 'commodities_add_shortcode' );
+
+		// Hooking up our function to theme setup
+		//add_action( 'init',  array( $plugin_public, 'create_posttype' ));
+		$this->loader->add_action( 'init', $plugin_public, 'create_posttype' );
+
+		//add_action( 'wp_footer', 'print_inline_script' );
+		$this->loader->add_action( 'wp_footer', $plugin_public, 'print_inline_script' );
+
 	}
 
 	/**
