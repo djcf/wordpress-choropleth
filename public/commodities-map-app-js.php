@@ -85,15 +85,19 @@
         done: map_loaded
     });
 
-    // Add labels to the map
+    // Define data for the map labels
     var labelsdata = {
         <?php echo implode(", ", $area_series_labels); ?>
     }
 
+    // Add labels data to the map
     wmap.labels({"fontSize": 10, labelColor: "#222", 'customLabelText': labelsdata});
 
     // Arrange the labels so they don't collide
     arrangeLabels();
+
+    // Add "legend"
+    addLegend();
 </script>
 
 <style>
@@ -102,6 +106,14 @@
  * included in this file.
  */
 
+ #commodities-list > li {
+   width: 33%;
+   float: left;
+ }
+
+.hidden {
+  display: none;
+}
 .ctrlButtonPanel {
     position: absolute;
     top: 0px;

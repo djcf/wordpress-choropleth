@@ -18,34 +18,74 @@ function arrangeLabels() {
   var move = 1;
   while(move > 0) {
       move = 0;
-    d3.selectAll("text").each(function() {
-         var that = this,
-             a = this.getBoundingClientRect();
-         d3.selectAll("text")
-            .each(function() {
-              if(this != that) {
-                var b = this.getBoundingClientRect();
-                if((Math.abs(a.left - b.left) * 2 < (a.width + b.width)) &&
-                   (Math.abs(a.top - b.top) * 2 < (a.height + b.height))) {
-                  // overlap, move labels
-                  var dx = (Math.max(0, a.right - b.left) +
-                           Math.min(0, a.left - b.right)) * 0.01,
-                      dy = (Math.max(0, a.bottom - b.top) +
-                           Math.min(0, a.top - b.bottom)) * 0.02,
-                      tt = d3.transform(d3.select(this).attr("transform")),
-                      to = d3.transform(d3.select(that).attr("transform"));
-                  move += Math.abs(dx) + Math.abs(dy);
+      d3.selectAll("text").each(function() {
+           var that = this,
+               a = this.getBoundingClientRect();
+           d3.selectAll("text")
+              .each(function() {
+                if(this != that) {
+                  var b = this.getBoundingClientRect();
+                  if((Math.abs(a.left - b.left) * 2 < (a.width + b.width)) &&
+                     (Math.abs(a.top - b.top) * 2 < (a.height + b.height))) {
+                    // overlap, move labels
+                    var dx = (Math.max(0, a.right - b.left) +
+                             Math.min(0, a.left - b.right)) * 0.01,
+                        dy = (Math.max(0, a.bottom - b.top) +
+                             Math.min(0, a.top - b.bottom)) * 0.02,
+                        tt = d3.transform(d3.select(this).attr("transform")),
+                        to = d3.transform(d3.select(that).attr("transform"));
+                    move += Math.abs(dx) + Math.abs(dy);
 
-                  to.translate = [ to.translate[0] + dx, to.translate[1] + dy ];
-                  tt.translate = [ tt.translate[0] - dx, tt.translate[1] - dy ];
-                  d3.select(this).attr("transform", "translate(" + tt.translate + ")");
-                  d3.select(that).attr("transform", "translate(" + to.translate + ")");
-                  a = this.getBoundingClientRect();
+                    to.translate = [ to.translate[0] + dx, to.translate[1] + dy ];
+                    tt.translate = [ tt.translate[0] - dx, tt.translate[1] - dy ];
+                    d3.select(this).attr("transform", "translate(" + tt.translate + ")");
+                    d3.select(that).attr("transform", "translate(" + to.translate + ")");
+                    a = this.getBoundingClientRect();
+                  }
                 }
-              }
-            });
-       });
+              });
+         });
      }
+}
+
+function addLegend() {
+  // Add "legend"
+  var list = jQuery("<ul id='commodities-list'></ul>").insertAfter("#commodities-map");
+  var legend = jQuery("<h3 class='commodities-map-legend'>Legend</h3>").insertAfter("#commodities-map");
+
+  jQuery.each(wmap.worldTopo.objects.world.geometries, function( index, value ) {
+      if (value.id in labelsdata) {
+        var country_name = jQuery("<li>")
+          .html("<a href='#' class='navhelper'>" + value.properties.name + "</a>")
+          .appendTo(list)
+          .click(function(event) {
+              event.preventDefault();
+              var commoditiesList = jQuery( this ).children("ul");
+              if (commoditiesList.hasClass("hidden")) {
+                  commoditiesList.slideDown();
+                  commoditiesList.removeClass("hidden");
+              } else {
+                  commoditiesList.slideUp();
+                  commoditiesList.addClass("hidden");
+              }
+          });
+        var country_commodities_list = jQuery("<ul>")
+          .addClass("hidden")
+          .appendTo(country_name);
+        jQuery.each(tooltips[value.id], function(i, v) {
+            var commodity_item = jQuery("<li>")
+              .appendTo(country_commodities_list)
+            var commodity_link = jQuery("<a>")
+              .text(v.title)
+              .attr("href", v.url)
+              .appendTo(commodity_item);
+        });
+      }
+  });
+
+  jQuery('.navhelper').click(function(event){
+      event.preventDefault();
+  });
 }
 
 add_tooltip = function(geography) {
@@ -140,7 +180,6 @@ map_loaded = function(datamap) {
       // prevent the zoom buttons from running their normal handlers
       jQuery('.ctrlButtonPanel a').click(function(event){
           event.preventDefault();
-          console.log(event.target.id + " clicked");
       });
 
       // Zoom the viewport until the required zoom level is met
