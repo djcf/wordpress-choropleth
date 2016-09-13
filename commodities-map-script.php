@@ -260,9 +260,9 @@
  }
 
  #ctrlButtons a {
-    font-size: 32px !important;
+    font-size: 14px !important;
     display: block;
-    margin: 15px;
+    margin: 5px 10px 5px 10px;
 }
 
 #ctrlButtons a:hover {
@@ -270,6 +270,6 @@
 }
 
 #zoomOutBtn {
-  padding-left: 3.5px;
+  padding-left: 2.5px;
 }
 </style>

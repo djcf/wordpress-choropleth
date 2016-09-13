@@ -3,14 +3,26 @@
  * included in this file.
  */
 
-.ctrlButtonPanel {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 50px;
-    height: 100px;
-    background: beige none repeat scroll 0% 0%;
-    margin: 10px;
-    border: 1px solid olive;
-    box-shadow: 1px 1px 5px #888888;
+ .ctrlButtonPanel {
+     position: absolute;
+     top: 0px;
+     left: 0px;
+     background: beige none repeat scroll 0% 0%;
+     margin: 10px;
+     border: 1px solid olive;
+     box-shadow: 1px 1px 5px #888888;
+  }
+
+  #ctrlButtons a {
+     font-size: 14px !important;
+     display: block;
+     margin: 5px 10px 5px 10px;
+ }
+
+ #ctrlButtons a:hover {
+   text-decoration: none;
+ }
+
+ #zoomOutBtn {
+   padding-left: 2.5px;
  }
