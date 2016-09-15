@@ -51,7 +51,7 @@ function arrangeLabels() {
 function addLegend() {
   // Add "legend"
   var list = jQuery("<ul id='commodities-list'></ul>").insertAfter("#commodities-map");
-  var legend = jQuery("<h3 class='commodities-map-legend'>Legend</h3>").insertAfter("#commodities-map");
+  //var legend = jQuery("<h3 class='commodities-map-legend'>Legend</h3>").insertAfter("#commodities-map");
 
   jQuery.each(wmap.worldTopo.objects.world.geometries, function( index, value ) {
       if (value.id in labelsdata) {

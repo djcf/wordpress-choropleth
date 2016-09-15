@@ -38,7 +38,7 @@ class Commodities_Map_Public {
 	 * @access   private
 	 * @var      string    $version    The current version of this plugin.
 	 */
-	private $version = 0.1;
+	private $version = 0.2;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -70,11 +70,11 @@ class Commodities_Map_Public {
 		 * class.
 		 */
 
-         $plugin_dir = plugin_dir_url( __FILE__ ) . '/css';
+    $plugin_dir = plugin_dir_url( __FILE__ ) . 'css';
 
 		 wp_enqueue_style( 'mb.balloon', "$plugin_dir/mb.balloon.css", array(), $this->version);
 		 #wp_enqueue_style( "jquery-qtip", 'http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/basic/jquery.qtip.min.css', array(), $this->version, 'all' );
-  		wp_enqueue_style( 'commodities-map-styles', plugins_url( 'public/css/commodities-map-public.css', __FILE__ ) );
+  	 wp_enqueue_style( 'commodities-map-styles', "$plugin_dir/commodities-map-public.css", array(), $this->version);
 
 	}
 
@@ -96,8 +96,8 @@ class Commodities_Map_Public {
 		 * class.
 		 */
 
-		//$plugin_dir = plugin_dir_url( __FILE__ ) . "js";
-		$plugin_dir = "http://localhost:8080/wp-content/plugins/commodities-map/public/js";
+		$plugin_dir = plugin_dir_url( __FILE__ ) . "js";
+		//$plugin_dir = "http://localhost:8080/wp-content/plugins/commodities-map/public/js";
 				 //wp_enqueue_script( 'commodities-map-js', plugins_url( 'commodities-map-script.php', __FILE__ ) );
 
 		 #wp_enqueue_script( "jquery-qtip", "http://cdn.jsdelivr.net/qtip2/2.2.1/basic/jquery.qtip.min.js", array( 'jquery' ), $this->version);

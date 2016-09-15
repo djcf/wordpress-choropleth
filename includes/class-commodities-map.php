@@ -167,7 +167,10 @@ class Commodities_Map {
 
 		$plugin_public = new Commodities_Map_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_styles', $plugin_public, 'enqueue_styles' );
+		/* wp_enqueue_scripts is the proper hook to use when enqueuing items that are meant to appear on the front end. Despite the name, it is used for enqueuing both scripts and styles. */
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+		//$plugin_public->enqueue_styles();
+
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
 		add_shortcode( 'commodities-map', array( 'Commodities_Map_Public',  'commodities_add_shortcode' ));
