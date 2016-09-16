@@ -56,11 +56,15 @@ function addLegend() {
   jQuery.each(wmap.worldTopo.objects.world.geometries, function( index, value ) {
       if (value.id in labelsdata) {
         var country_name = jQuery("<li>")
-          .html("<a href='#' class='navhelper'>" + value.properties.name + "</a>")
-          .appendTo(list)
+          .appendTo(list);
+        var country_name_link = jQuery("<a>")
+          .attr("href", "#")
+          .addClass("navhelper")
+          .text(value.properties.name)
+          .appendTo(country_name)
           .click(function(event) {
               event.preventDefault();
-              var commoditiesList = jQuery( this ).children("ul");
+              var commoditiesList = jQuery( this ).parent().children("ul");
               if (commoditiesList.hasClass("hidden")) {
                   commoditiesList.slideDown();
                   commoditiesList.removeClass("hidden");
@@ -78,7 +82,7 @@ function addLegend() {
             var commodity_link = jQuery("<a>")
               .text(v.title)
               .attr("href", v.url)
-              .appendTo(commodity_item);
+              .appendTo(commodity_item)
         });
       }
   });
