@@ -29,8 +29,10 @@
         dataset[iso] = { commodities: value, fillColor: paletteScale(value) };
     });
 
+    var commodities =  <?php echo json_encode($commodities, JSON_PRETTY_PRINT); ?>;
+
     tooltips = <?php echo json_encode($area_series_nav, JSON_PRETTY_PRINT); ?>;
-    countries = <?php echo json_encode($countries, JSON_PRETTY_PRINT); ?>;
+    //countries = <?php //echo json_encode($countries, JSON_PRETTY_PRINT); ?>;
     // Create map navigation button elements
     var ctrlButtons = jQuery("<div>", {
       id: 'ctrlButtons',

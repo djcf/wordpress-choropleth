@@ -120,7 +120,7 @@ class Commodities_Map_Public {
 					'singular_name' => __( 'Commodity' )
 				),
 				'public' => true,
-				'has_archive' => true,
+				'has_archive' => false,
 				'rewrite' => array('slug' => 'commodities'),
 				'supports' => array(
 				  'title',
@@ -133,7 +133,7 @@ class Commodities_Map_Public {
 			)
 		);
 
-		register_post_type( 'countries',
+		/*register_post_type( 'countries',
 		// CPT Options
 			array(
 				'labels' => array(
@@ -150,7 +150,7 @@ class Commodities_Map_Public {
 				  'revisions'
 				)
 			)
-		);
+		);*/
 
 	}
 
@@ -173,10 +173,13 @@ class Commodities_Map_Public {
 	    );
 
 	    $posts = get_posts($args);
+			$commodities = array();
 
 	    foreach($posts as $post) {
 	        $post->fields  = get_post_custom($post->ID);
 	        $post->permalink = get_permalink($post->ID);
+
+					$commodities[$post->post_title] = $post->permalink;
 
 	        if (isset($post->fields['country']) && is_array($post->fields['country'])) {
 	            foreach($post->fields['country'] as $country) {
@@ -206,7 +209,7 @@ class Commodities_Map_Public {
 	        $area_series_labels[] = "'$region_name': '$region_total'";
 	    }
 
-	    $args = array(
+	    /*$args = array(
 	        'posts_per_page' => -1,
 	        'post_type' => 'countries'
 	    );
@@ -217,7 +220,7 @@ class Commodities_Map_Public {
 
 	    foreach($posts as $post) {
 	        $countries[$post->post_title] = $post->post_content;
-	    }
+	    }*/
 
 	    #if ( wp_script_is( 'datamaps', 'done' ) ) {
 	       include __DIR__ . "/commodities-map-app-js.php";
