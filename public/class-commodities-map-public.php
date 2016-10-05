@@ -96,10 +96,10 @@ class Commodities_Map_Public {
 		 * class.
 		 */
 
-		//$plugin_dir = plugin_dir_url( __FILE__ ) . "js";
-		$plugin_dir = "http://localhost:8080/wp-content/plugins/commodities-map/public/js";
+		$plugin_dir = plugin_dir_url( __FILE__ ) . "js";
+		//$plugin_dir = "http://localhost:8080/wp-content/plugins/commodities-map/public/js";
 		//wp_enqueue_script( 'commodities-map-js', plugins_url( 'commodities-map-script.php', __FILE__ ) );
-		 wp_enqueue_script( "sdfsdf", "http://localhost:8080/wp-includes/js/jquery/jquery.js", $this->version);
+		//wp_enqueue_script( "sdfsdf", "http://localhost:8080/wp-includes/js/jquery/jquery.js", $this->version);
 
 		 #wp_enqueue_script( "jquery-qtip", "http://cdn.jsdelivr.net/qtip2/2.2.1/basic/jquery.qtip.min.js", array( 'jquery' ), $this->version);
 		 wp_enqueue_script( "mballoon", "$plugin_dir/components/jquery.mb.balloon.js", array('jquery'), $this->version);
