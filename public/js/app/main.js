@@ -2,9 +2,9 @@ function get_toolbar_content(region) {
     region.name = region.properties.name;
     var title = '<h2>' + region.name + '</h2>';
     var body = "";
-    if (region.name in countries) {
-        body = countries[region.name];
-    }
+    //if (region.name in countries) {
+    //    body = countries[region.name];
+    //}
     var items = '';
     jQuery.each(tooltips[region.id], function(index, value) {
         link = "<a href='" + value.url + "'>" + value.title + "</a>";
@@ -48,43 +48,76 @@ function arrangeLabels() {
      }
 }
 
+function add_to_legend(country_code, country_name, list, sorting) {
+	var country_name_li = jQuery("<li>")
+	  .attr("data-name", country_name);
+
+	if (sorting) {
+	  var sorted = false;
+	  jQuery.each(list.children(), function(index, item) {
+		if (!sorted && (item.getAttribute("data-name") > country_name)) {
+			country_name_li.insertBefore(item);
+			sorted = true;
+		}
+	  });
+	  if (!sorted) {
+	     country_name_li.appendTo(list);
+	  }
+	} else {
+	  country_name_li.appendTo(list);
+	}
+
+	if (list.children().length < 1) {
+	   country_name_li.appendTo(list);
+	}
+
+	var country_name_link = jQuery("<a>")
+	  .attr("href", "#")
+	  .addClass("navhelper")
+	  .text(country_name)
+	  .appendTo(country_name_li)
+	  .click(function(event) {
+	      event.preventDefault();
+	      var commoditiesList = jQuery( this ).parent().children("ul");
+	      if (commoditiesList.hasClass("hidden")) {
+		  commoditiesList.slideDown();
+		  commoditiesList.removeClass("hidden");
+	      } else {
+		  commoditiesList.slideUp();
+		  commoditiesList.addClass("hidden");
+	      }
+	  });
+	var country_commodities_list = jQuery("<ul>")
+	  .addClass("hidden")
+	  .appendTo(country_name_li);
+	jQuery.each(tooltips[country_code], function(i, v) {
+	    var commodity_item = jQuery("<li>")
+	      .appendTo(country_commodities_list)
+	    var commodity_link = jQuery("<a>")
+	      .text(v.title)
+	      .attr("href", v.url)
+	      .appendTo(commodity_item)
+	});
+}
+
 function addLegend() {
   // Add "legend"
   var list = jQuery("<ul id='commodities-list'></ul>").insertAfter("#commodities-map");
   //var legend = jQuery("<h3 class='commodities-map-legend'>Legend</h3>").insertAfter("#commodities-map");
+  var legend = [];
 
   jQuery.each(wmap.worldTopo.objects.world.geometries, function( index, value ) {
       if (value.id in labelsdata) {
-        var country_name = jQuery("<li>")
-          .appendTo(list);
-        var country_name_link = jQuery("<a>")
-          .attr("href", "#")
-          .addClass("navhelper")
-          .text(value.properties.name)
-          .appendTo(country_name)
-          .click(function(event) {
-              event.preventDefault();
-              var commoditiesList = jQuery( this ).parent().children("ul");
-              if (commoditiesList.hasClass("hidden")) {
-                  commoditiesList.slideDown();
-                  commoditiesList.removeClass("hidden");
-              } else {
-                  commoditiesList.slideUp();
-                  commoditiesList.addClass("hidden");
-              }
-          });
-        var country_commodities_list = jQuery("<ul>")
-          .addClass("hidden")
-          .appendTo(country_name);
-        jQuery.each(tooltips[value.id], function(i, v) {
-            var commodity_item = jQuery("<li>")
-              .appendTo(country_commodities_list)
-            var commodity_link = jQuery("<a>")
-              .text(v.title)
-              .attr("href", v.url)
-              .appendTo(commodity_item)
-        });
+        add_to_legend(value.id, value.properties.name, list, true);
+	legend.push(value.id);
       }
+  });
+  
+  jQuery.each({"COM": "Comoros", "SGP": "Singapore", "REU": "Reunion"}, function (key, value) {
+    if (!(key in legend)) {
+        add_to_legend(key, value, list, true);
+	legend.push(value.id);
+    }
   });
 
   jQuery('.navhelper').click(function(event){
