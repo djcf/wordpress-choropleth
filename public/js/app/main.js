@@ -71,33 +71,33 @@ function add_to_legend(country_code, country_name, list, sorting) {
 	   country_name_li.appendTo(list);
 	}
 
-	var country_name_link = jQuery("<a>")
-	  .attr("href", "#")
-	  .addClass("navhelper")
-	  .text(country_name)
-	  .appendTo(country_name_li)
-	  .click(function(event) {
-	      event.preventDefault();
-	      var commoditiesList = jQuery( this ).parent().children("ul");
-	      if (commoditiesList.hasClass("hidden")) {
-		  commoditiesList.slideDown();
-		  commoditiesList.removeClass("hidden");
-	      } else {
-		  commoditiesList.slideUp();
-		  commoditiesList.addClass("hidden");
+  var country_name_link = jQuery("<a>")
+    .attr("href", "#")
+    .addClass("navhelper")
+    .text(country_name)
+    .appendTo(country_name_li)
+    .click(function(event) {
+        event.preventDefault();
+        var commoditiesList = jQuery( this ).parent().children("ul");
+        if (commoditiesList.hasClass("hidden")) {
+          commoditiesList.slideDown();
+          commoditiesList.removeClass("hidden");
+        } else {
+          commoditiesList.slideUp();
+          commoditiesList.addClass("hidden");
 	      }
 	  });
 	var country_commodities_list = jQuery("<ul>")
-	  .addClass("hidden")
-	  .appendTo(country_name_li);
-	jQuery.each(tooltips[country_code], function(i, v) {
-	    var commodity_item = jQuery("<li>")
-	      .appendTo(country_commodities_list)
-	    var commodity_link = jQuery("<a>")
-	      .text(v.title)
-	      .attr("href", v.url)
-	      .appendTo(commodity_item)
-	});
+    .addClass("hidden")
+    .appendTo(country_name_li);
+    jQuery.each(tooltips[country_code], function(i, v) {
+        var commodity_item = jQuery("<li>")
+          .appendTo(country_commodities_list)
+        var commodity_link = jQuery("<a>")
+          .text(v.title)
+          .attr("href", v.url)
+          .appendTo(commodity_item)
+    });
 }
 
 function addLegend() {
@@ -109,14 +109,14 @@ function addLegend() {
   jQuery.each(wmap.worldTopo.objects.world.geometries, function( index, value ) {
       if (value.id in labelsdata) {
         add_to_legend(value.id, value.properties.name, list, true);
-	legend.push(value.id);
+	      legend.push(value.id);
       }
   });
   
-  jQuery.each({"COM": "Comoros", "SGP": "Singapore", "REU": "Reunion"}, function (key, value) {
-    if (!(key in legend)) {
-        add_to_legend(key, value, list, true);
-	legend.push(value.id);
+  jQuery.each({"COM": "Comoros", "PYF": "French Polynesia", "TON": "Tonga", "SGP": "Singapore", "REU": "Reunion"}, function (key, value) {
+    if (!(key in legend) && (key in tooltips)) {
+       add_to_legend(key, value, list, true);
+	     legend.push(value.id);
     }
   });
 
