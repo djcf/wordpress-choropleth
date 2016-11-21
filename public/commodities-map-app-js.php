@@ -1,6 +1,10 @@
 <script>
+    script_start = performance.now();
     //** Specify map settings from plugin data **//
     if (is_high_res()) {
+        map_has_loaded = false;
+        window.setInterval(slow_script_timer, 1000);
+
         jQuery("#commodities-map").html("<div id='hires-warning'>It looks like the map is taking a long time to load. <a href='" + window.location.href.split("?")[0] + "?lores'>Click here to see the low-resolution map instead.</a></div>");
     }
 
@@ -42,24 +46,6 @@
         <?php echo implode(", ", $area_series_labels); ?>
     }
 
-    // Create map navigation button elements
-    var ctrlButtons = jQuery("<div>", {
-      id: 'ctrlButtons',
-      class: 'ctrlButtonPanel'
-    }).appendTo("#commodities-map");
-
-    var zoomInBtn = jQuery("<a>", {
-      id: 'zoomInBtn',
-      href: '#',
-      html: '+'
-    }).appendTo(ctrlButtons);
-
-    var zoomOutBtn = jQuery("<a>", {
-      id: 'zoomOutBtn',
-      href: '#',
-      html: '-'
-    }).appendTo(ctrlButtons);
-
     var width = 800,
         height = 367,
         center = [width / 2, height / 2];
@@ -81,16 +67,7 @@
               .projection(projection);
           return {path: path, projection: projection};
         },
-        geographyConfig: {
-            fontFamily: "Garamond",
-            borderColor: '#d9cb8f',
-            highlightBorderWidth: 2,
-            highlightFillColor: function(geo) {
-                return geo['fillColor'] || '#d8e4ca';
-            },
-            // only change border
-            highlightBorderColor: '#B7B7B7'
-        },
+        geographyConfig: get_geography_config(),
         done: map_loaded
     });
 </script>

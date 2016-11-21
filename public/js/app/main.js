@@ -1,3 +1,11 @@
+var slow_script_timer = function() {
+  if (!map_has_loaded) {
+    if ((performance.now() - script_start) > 20000) {
+      window.location.href = window.location.href.split("?")[0] + "?lores";
+    }    
+  }
+}
+
 function get_toolbar_content(region) {
     region.name = region.properties.name;
     var title = '<h2>' + region.name + '</h2>';
@@ -102,13 +110,26 @@ function add_to_legend(country_code, country_name, list, sorting) {
     });
 }
 
+function get_geography_config() {
+  return {
+            fontFamily: "Garamond",
+            borderColor: '#d9cb8f',
+            highlightBorderWidth: 2,
+            highlightFillColor: function(geo) {
+                return geo['fillColor'] || '#d8e4ca';
+            },
+            // only change border
+            highlightBorderColor: '#B7B7B7'
+        };
+}
+
 function addLegend() {
   // Add "legend"
-  var list = jQuery("<ul id='commodities-list'></ul>").insertAfter("#commodities-map");
+  var list = jQuery("<ul id='commodities-list' style='float: left;'></ul>").insertAfter("#commodities-map");
   //var legend = jQuery("<h3 class='commodities-map-legend'>Legend</h3>").insertAfter("#commodities-map");
 
   jQuery.each(labelsdata, function(id, value) {
-    add_to_legend(id, get_country_name(id), list, true);
+    add_to_legend(id, get_country_name(id), list, is_high_res());
   });
   
   jQuery('.navhelper').click(function(event){
@@ -194,6 +215,24 @@ map_loaded = function(datamap) {
           });
       }
 
+      // Create map navigation button elements
+      var ctrlButtons = jQuery("<div>", {
+        id: 'ctrlButtons',
+        class: 'ctrlButtonPanel'
+      }).appendTo("#commodities-map");
+
+      var zoomInBtn = jQuery("<a>", {
+        id: 'zoomInBtn',
+        href: '#',
+        html: '+'
+      }).appendTo(ctrlButtons);
+
+      var zoomOutBtn = jQuery("<a>", {
+        id: 'zoomOutBtn',
+        href: '#',
+        html: '-'
+      }).appendTo(ctrlButtons);
+
     // Attach or reattach a tooltip with region information.
       datamap.svg.selectAll('.datamaps-subunit').on('click', add_tooltip);
 
@@ -234,10 +273,12 @@ map_loaded = function(datamap) {
 
 
     if (is_high_res()) {
+      map_has_loaded = true;
       jQuery("#hires-warning").remove();
     } else {
-      jQuery("#commodities-map").after("<p style='font-size: smaller; float: left'>You are viewing a decreased resolution map. As a result, not all countries are shown on the map. <a href='" + window.location.href.split("?")[0] + "?hires'>Click here to load the full resolution map instead.</a></p>");
+      jQuery("#commodities-map").after("<p style='font-size: smaller; float: left; font-style: italic;'>You are viewing a decreased resolution map. As a result, not all countries are shown on the map. <a href='" + window.location.href.split("?")[0] + "?hires'>Click here to load the full resolution map instead.</a></p>");
     }
+    jQuery("#commodities-list").after("<p style='font-size: smaller; float: left; font-style: italic;'>Map loaded in " + ((performance.now() - script_start) / 1000) + " seconds</p>");
 }
 
 function get_country_name (id) {

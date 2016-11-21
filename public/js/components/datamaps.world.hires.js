@@ -769,7 +769,7 @@ function is_high_res() {
       });
     }
     else {
-      draw( this[options.scope + 'Topo'] || options.geographyConfig.dataJson);
+      setTimeout(draw( this[options.scope + 'Topo'] || options.geographyConfig.dataJson), 100);
     }
 
     return this;
@@ -790,7 +790,8 @@ function is_high_res() {
             Datamaps.prototype.updateChoropleth.call(self, data);
           });
         }
-        drawSubunits.call(self, data);
+        setTimeout(drawSubunits.call(self, data), 50);
+        //drawSubunits.call(self, data);
         handleGeographyConfig.call(self);
 
         if ( self.options.geographyConfig.popupOnHover || self.options.bubblesConfig.popupOnHover) {
