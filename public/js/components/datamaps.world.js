@@ -1,3 +1,7 @@
+function is_high_res() {
+  return false;
+}
+
 (function() {
   var svg;
 

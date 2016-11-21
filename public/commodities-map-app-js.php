@@ -1,5 +1,8 @@
 <script>
     //** Specify map settings from plugin data **//
+    if (is_high_res()) {
+        jQuery("#commodities-map").html("<div id='hires-warning'>It looks like the map is taking a long time to load. <a href='" + window.location.href.split("?")[0] + "?lores'>Click here to see the low-resolution map instead.</a></div>");
+    }
 
     var series = [ <?php echo implode(",", $area_series_js); ?> ];
 
@@ -33,6 +36,12 @@
 
     tooltips = <?php echo json_encode($area_series_nav, JSON_PRETTY_PRINT); ?>;
     //countries = <?php //echo json_encode($countries, JSON_PRETTY_PRINT); ?>;
+
+        // Define data for the map labels
+    labelsdata = {
+        <?php echo implode(", ", $area_series_labels); ?>
+    }
+
     // Create map navigation button elements
     var ctrlButtons = jQuery("<div>", {
       id: 'ctrlButtons',
@@ -54,8 +63,6 @@
     var width = 800,
         height = 367,
         center = [width / 2, height / 2];
-
-
 
     // render map
     var wmap = new Datamap({
@@ -86,18 +93,4 @@
         },
         done: map_loaded
     });
-
-    // Define data for the map labels
-    var labelsdata = {
-        <?php echo implode(", ", $area_series_labels); ?>
-    }
-
-    // Add labels data to the map
-    wmap.labels({"fontSize": 10, labelColor: "#222", 'customLabelText': labelsdata});
-
-    // Arrange the labels so they don't collide
-    arrangeLabels();
-
-    // Add "legend"
-    addLegend();
 </script>
