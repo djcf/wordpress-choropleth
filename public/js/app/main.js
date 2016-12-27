@@ -2,7 +2,7 @@ var slow_script_timer = function() {
   if (!map_has_loaded) {
     if ((performance.now() - script_start) > 20000) {
       window.location.href = window.location.href.split("?")[0] + "?lores";
-    }    
+    }
   }
 }
 
@@ -57,25 +57,23 @@ function arrangeLabels() {
 }
 
 function add_to_legend(country_code, country_name, list, sorting) {
+	if (country_name == "") {
+		console.log("Couldn't find country name for " + country_code);
+		return;
+	}
 	var country_name_li = jQuery("<li>")
 	  .attr("data-name", country_name);
 
+	var sorted = false;
 	if (sorting) {
-	  var sorted = false;
 	  jQuery.each(list.children(), function(index, item) {
   		if (!sorted && (item.getAttribute("data-name") > country_name)) {
   			country_name_li.insertBefore(item);
   			sorted = true;
   		}
 	  });
-	  if (!sorted) {
-	     country_name_li.appendTo(list);
-	  }
-	} else {
-	  country_name_li.appendTo(list);
 	}
-
-	if (list.children().length < 1) {
+	if ((!sorted) || (!sorting) || (list.children().length < 1)) {
 	   country_name_li.appendTo(list);
 	}
 
@@ -98,8 +96,8 @@ function add_to_legend(country_code, country_name, list, sorting) {
 	      }
 	  });
 	var country_commodities_list = jQuery("<ul>")
-    .addClass("hidden")
-    .appendTo(country_name_li);
+	    .addClass("hidden")
+	    .appendTo(country_name_li);
     jQuery.each(tooltips[country_code], function(i, v) {
         var commodity_item = jQuery("<li>")
           .appendTo(country_commodities_list)

@@ -12,20 +12,16 @@ Synthbiowatch Map Plugin. Prints a clickable chlorpleth navigation aid using the
 
 == Description ==
 
-WIP
+This plug in adds a chloropleth to your wordpress using a shortcode. 
+
+A chloropleth is a special kind of map where each region is colour-coded according to some value. For example, if you were charting world populations, you could make more populous countries appear darker.
 
 == Installation ==
 
-WIP
+Clone this repository to your wordpress plugins area, or upload it to your server using FTP. If you download this repository as a zip archive, you must extract the contents before using the plugin. Then click "Activate Plugin" from the Wordpress plugins area.
 
-== Frequently Asked Questions ==
+== Usage ==
 
-WIP
+You should now have a new custom post type, the "Commodity". Create a new "Commodity" and add the custom attribute "country_type" below the content. You can now associate custom posts to countries; the most custom posts you associate with a particular country, the darker that country will appear on the map.
 
-== Screenshots ==
-
-WIP
-
-== Changelog ==
-
-* Boilerplate
+To insert the map, use the shortcode [commodities_map] from within any post type.
