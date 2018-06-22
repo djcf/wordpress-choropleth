@@ -1,6 +1,7 @@
 === Simple Choropleth ===
 * Contributors: daniel
 * Donate link: http://djcf.github.com
+* Sponsored by: SynBioWatch (www.synbiowatch.org)
 * Tags: mapping, chloropleth
 * Requires at least: 4.3
 * Tested up to: 4.3
